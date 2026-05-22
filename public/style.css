@@ -125,17 +125,46 @@ button {
     gap: 8px;
 }
 
-.btn-primary { background-color: var(--olx-teal); color: white; }
-.btn-primary:hover { background-color: #00454d; transform: translateY(-1px); }
+.btn-primary {
+    background-color: var(--olx-teal);
+    color: white;
+}
 
-.btn-success { background-color: var(--olx-mint); color: var(--olx-teal); }
-.btn-success:hover { background-color: #1bcbc3; transform: translateY(-1px); box-shadow: 0 5px 15px rgba(35, 229, 219, 0.3); }
+.btn-primary:hover {
+    background-color: #00454d;
+    transform: translateY(-1px);
+}
 
-.btn-danger { background-color: #fff5f5; color: var(--danger); }
-.btn-danger:hover { background-color: var(--danger); color: white; }
+.btn-success {
+    background-color: var(--olx-mint);
+    color: var(--olx-teal);
+}
 
-.btn-action { background-color: #f0f4f5; color: var(--olx-teal); }
-.btn-action:hover { background-color: var(--olx-teal); color: white; }
+.btn-success:hover {
+    background-color: #1bcbc3;
+    transform: translateY(-1px);
+    box-shadow: 0 5px 15px rgba(35, 229, 219, 0.3);
+}
+
+.btn-danger {
+    background-color: #fff5f5;
+    color: var(--danger);
+}
+
+.btn-danger:hover {
+    background-color: var(--danger);
+    color: white;
+}
+
+.btn-action {
+    background-color: #f0f4f5;
+    color: var(--olx-teal);
+}
+
+.btn-action:hover {
+    background-color: var(--olx-teal);
+    color: white;
+}
 
 /* Status Badges */
 .status-badge {
@@ -147,9 +176,20 @@ button {
     font-weight: 600;
 }
 
-.status-active { background-color: #e6f7ed; color: var(--success); }
-.status-logout { background-color: #ffebe8; color: var(--danger); }
-.status-unknown { background-color: #edf2f7; color: #718096; }
+.status-active {
+    background-color: #e6f7ed;
+    color: var(--success);
+}
+
+.status-logout {
+    background-color: #ffebe8;
+    color: var(--danger);
+}
+
+.status-unknown {
+    background-color: #edf2f7;
+    color: #718096;
+}
 
 .message-badge {
     background: #ffebd1;
@@ -182,4 +222,48 @@ button {
 
 .form-group input:focus {
     border-color: var(--olx-teal);
+}
+
+/* Custom Additions for Editing and Live Scanning Feedback */
+.name-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-inline-edit {
+    padding: 4px 6px;
+    background: transparent;
+    border-radius: 4px;
+    font-size: 12px;
+    opacity: 0.4;
+    transition: opacity 0.2s, background-color 0.2s;
+}
+
+tr:hover .btn-inline-edit {
+    opacity: 1;
+}
+
+.btn-inline-edit:hover {
+    background-color: #e9eff0;
+    transform: none;
+}
+
+.status-scanning {
+    background-color: #ebf8ff;
+    color: #2b6cb0;
+    border: 1px dashed #bee3f8;
+    animation: pulseScan 1.5s infinite ease-in-out;
+}
+
+@keyframes pulseScan {
+    0% {
+        opacity: 0.6;
+    }
+    50% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0.6;
+    }
 }

@@ -1,3 +1,6 @@
+// Local cache state to hold profiles dynamically
+let currentProfiles = [];
+
 document.addEventListener('DOMContentLoaded', () => {
     fetchProfiles();
     document.getElementById('btn-sync').addEventListener('click', scanStatuses);
@@ -7,11 +10,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
 async function fetchProfiles() {
     const res = await fetch('/api/profiles');
-    const data = await res.json();
-    renderTable(data, false);
+    currentProfiles = await res.json();
+    renderTable(currentProfiles, false);
 }
 
-function renderTable(profiles, hasStatusData = false) {
+function renderTable(profiles, hasStatusData = false, scanningAll = false) {
     const tbody = document.getElementById('profiles-tbody');
     tbody.innerHTML = '';
 
@@ -24,7 +27,10 @@ function renderTable(profiles, hasStatusData = false) {
         let statusHtml = `<span class="status-badge status-unknown">Непроверен</span>`;
         let unreadHtml = `<span style="color: #a0aec0;">—</span>`;
 
-        if (hasStatusData) {
+        if (scanningAll) {
+            statusHtml = `<span class="status-badge status-scanning">⏳ Проверява се...</span>`;
+            unreadHtml = `<span style="color: #a0aec0; font-style: italic;">Изчакване</span>`;
+        } else if (hasStatusData) {
             if (p.status === 'Logged Out') {
                 statusHtml = `<span class="status-badge status-logout"> Излязъл (Sign-out)</span>`;
                 unreadHtml = `<span style="color: var(--danger); font-weight:600;">Недостъпно</span>`;
@@ -40,7 +46,12 @@ function renderTable(profiles, hasStatusData = false) {
         const tr = document.createElement('tr');
         tr.innerHTML = `
             <td>#${p.id}</td>
-            <td><strong>${p.name}</strong></td>
+            <td>
+                <div class="name-container">
+                    <strong id="profile-name-${p.id}">${p.name}</strong>
+                    <button class="btn-inline-edit" onclick="editProfileName(${p.id})">✏️</button>
+                </div>
+            </td>
             <td>${statusHtml}</td>
             <td>${unreadHtml}</td>
             <td style="text-align: right;">
@@ -53,18 +64,41 @@ function renderTable(profiles, hasStatusData = false) {
 }
 
 async function scanStatuses() {
-    const tbody = document.getElementById('profiles-tbody');
-    tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding: 40px; font-weight:500; color: var(--olx-teal);">
-        <span class="sync-loader">⏳ Изпълнява се дълбока проверка в реално време през Chromium Headless... Моля, изчакайте.</span>
-    </td></tr>`;
+    // Instantly switch all row indicators to show progress is happening
+    renderTable(currentProfiles, false, true);
 
     try {
         const res = await fetch('/api/status');
-        const data = await res.json();
-        renderTable(data, true);
+        currentProfiles = await res.json();
+        renderTable(currentProfiles, true);
     } catch(e) {
         alert("Грешка при комуникация със сървъра.");
         fetchProfiles();
+    }
+}
+
+async function editProfileName(id) {
+    const nameElement = document.getElementById(`profile-name-${id}`);
+    const currentName = nameElement.innerText;
+
+    const newName = prompt("Въведете ново име за профила:", currentName);
+    if (newName === null) return; // Cancel hit
+    if (!newName.trim()) return alert("Името не може да бъде празно!");
+
+    try {
+        const res = await fetch(`/api/profiles/${id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name: newName })
+        });
+        const data = await res.json();
+        if (data.success) {
+            fetchProfiles(); // Refresh visual setup
+        } else {
+            alert("Неуспешно редактиране.");
+        }
+    } catch(e) {
+        alert("Възникна грешка при обновяването на името.");
     }
 }
 

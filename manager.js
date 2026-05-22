@@ -122,6 +122,20 @@ app.post('/api/profiles', (req, res) => {
     res.json({success: true, profiles});
 });
 
+// UPDATE profile name (NEW ENDPOINT)
+app.put('/api/profiles/:id', (req, res) => {
+    const id = parseInt(req.params.id);
+    const {name} = req.body;
+    if (!name || !name.trim()) return res.status(400).json({error: 'Name required'});
+
+    const profile = profiles.find(p => p.id === id);
+    if (!profile) return res.status(404).json({error: 'Profile not found'});
+
+    profile.name = name.trim();
+    saveProfiles();
+    res.json({success: true, profiles});
+});
+
 // Delete profile + clean folder
 app.delete('/api/profiles/:id', (req, res) => {
     const idDel = parseInt(req.params.id);
@@ -139,44 +153,55 @@ app.delete('/api/profiles/:id', (req, res) => {
     res.json({success: true, profiles});
 });
 
-// Run live status tracking for all setups
+// Run live status tracking with Controlled Concurrency (UPDATED)
 app.get('/api/status', async (req, res) => {
-    const liveStatuses = [];
-    for (let p of profiles) {
-        const result = await checkProfileStatus(p.id);
-        liveStatuses.push({
-            id: p.id,
-            name: p.name,
-            unreadCount: result.unreadCount,
-            status: result.status
-        });
+    const liveStatuses = new Array(profiles.length);
+    const CONCURRENCY_LIMIT = 3; // Adjust based on RAM. 3-4 is safe for headless Chrome.
+
+    // Helper to process profiles in chunks
+    async function worker(sequence) {
+        for (let i of sequence) {
+            const p = profiles[i];
+            const result = await checkProfileStatus(p.id);
+            liveStatuses[i] = {
+                id: p.id,
+                name: p.name,
+                unreadCount: result.unreadCount,
+                status: result.status
+            };
+        }
     }
+
+    // Build execution queues
+    const chains = Array.from({length: CONCURRENCY_LIMIT}, () => []);
+    profiles.forEach((_, index) => {
+        chains[index % CONCURRENCY_LIMIT].push(index);
+    });
+
+    // Run workers concurrently
+    await Promise.all(chains.map(chain => worker(chain)));
+
     res.json(liveStatuses);
 });
 
-// Open explicit profile
+// ... keep /api/open/:id and /api/open-active matching your original file ...
 app.post('/api/open/:id', async (req, res) => {
     const id = parseInt(req.params.id);
-    openBrowserWindow(id); // Runs asynchronously, doesn't block the app pipeline
+    openBrowserWindow(id);
     res.json({success: true});
 });
 
-// Open profiles with active unread messages simultaneously
 app.post('/api/open-active', async (req, res) => {
     let targetedProfiles = [];
-
     for (let p of profiles) {
         const result = await checkProfileStatus(p.id);
         if (result.unreadCount > 0 && result.status === 'Active') {
             targetedProfiles.push(p);
         }
     }
-
-    // Tiling them sequentially via client requests
     targetedProfiles.forEach(p => {
         openBrowserWindow(p.id, 1024, 768);
     });
-
     res.json({success: true, count: targetedProfiles.length});
 });
 
