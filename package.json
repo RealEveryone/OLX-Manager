@@ -1,5 +1,8 @@
 {
+  "name": "olx-profile-manager",
+  "version": "1.0.0",
   "dependencies": {
+    "express": "^4.21.1",
     "playwright": "^1.60.0"
   }
 }

@@ -1,0 +1,185 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+:root {
+    --bg-color: #f3f7f8;
+    --card-bg: #ffffff;
+    --olx-teal: #002f34;
+    --olx-mint: #23e5db;
+    --text-main: #406367;
+    --text-dark: #002f34;
+    --danger: #ff5656;
+    --success: #24b47e;
+    --border-radius: 12px;
+    --shadow: 0 10px 30px rgba(0, 47, 52, 0.05);
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    margin: 0;
+    padding: 40px 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.container {
+    width: 100%;
+    max-width: 1100px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--olx-teal);
+    padding: 24px 32px;
+    border-radius: var(--border-radius);
+    box-shadow: 0 10px 25px rgba(0, 47, 52, 0.15);
+}
+
+header h1 {
+    color: #ffffff;
+    margin: 0;
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+}
+
+.global-actions {
+    display: flex;
+    gap: 12px;
+}
+
+/* Glassy Modern Cards */
+.card {
+    background: var(--card-bg);
+    border-radius: var(--border-radius);
+    padding: 32px;
+    box-shadow: var(--shadow);
+    border: 1px solid rgba(0, 47, 52, 0.03);
+}
+
+.card h2 {
+    color: var(--text-dark);
+    font-size: 20px;
+    font-weight: 600;
+    margin-top: 0;
+    margin-bottom: 24px;
+}
+
+/* Beautiful Clean Table Layout */
+.table-container {
+    overflow-hidden: hidden;
+    border-radius: 8px;
+    border: 1px solid #e9eff0;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+}
+
+th {
+    background-color: #f8fafb;
+    color: var(--text-dark);
+    font-weight: 600;
+    font-size: 14px;
+    padding: 16px 20px;
+    text-align: left;
+    border-bottom: 2px solid #e9eff0;
+}
+
+td {
+    padding: 18px 20px;
+    font-size: 15px;
+    color: #4a5568;
+    border-bottom: 1px solid #e9eff0;
+    vertical-align: middle;
+}
+
+tr:last-child td {
+    border-bottom: none;
+}
+
+tr:hover td {
+    background-color: #fdfefe;
+}
+
+/* Clean Professional Buttons */
+button {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-primary { background-color: var(--olx-teal); color: white; }
+.btn-primary:hover { background-color: #00454d; transform: translateY(-1px); }
+
+.btn-success { background-color: var(--olx-mint); color: var(--olx-teal); }
+.btn-success:hover { background-color: #1bcbc3; transform: translateY(-1px); box-shadow: 0 5px 15px rgba(35, 229, 219, 0.3); }
+
+.btn-danger { background-color: #fff5f5; color: var(--danger); }
+.btn-danger:hover { background-color: var(--danger); color: white; }
+
+.btn-action { background-color: #f0f4f5; color: var(--olx-teal); }
+.btn-action:hover { background-color: var(--olx-teal); color: white; }
+
+/* Status Badges */
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 12px;
+    border-radius: 50px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.status-active { background-color: #e6f7ed; color: var(--success); }
+.status-logout { background-color: #ffebe8; color: var(--danger); }
+.status-unknown { background-color: #edf2f7; color: #718096; }
+
+.message-badge {
+    background: #ffebd1;
+    color: #b76e00;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-weight: 700;
+    font-size: 13px;
+    border: 1px solid #ffe0b2;
+}
+
+/* Form Styles */
+.form-group {
+    display: flex;
+    gap: 12px;
+    max-width: 500px;
+}
+
+.form-group input {
+    flex: 1;
+    padding: 12px 16px;
+    border: 2px solid #e9eff0;
+    border-radius: 6px;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    color: var(--text-dark);
+    outline: none;
+    transition: border-color 0.2s ease;
+}
+
+.form-group input:focus {
+    border-color: var(--olx-teal);
+}

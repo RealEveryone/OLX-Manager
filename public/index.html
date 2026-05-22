@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OLX Pro-Manager</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+    <header>
+        <h1>OLX Profile Master Control</h1>
+        <div class="global-actions">
+            <button id="btn-sync" class="btn-success">🔄 Сканиране за съобщения</button>
+            <button id="btn-open-active" class="btn-primary" style="background-color: white; color: var(--olx-teal);">📩 Стартирай активните</button>
+        </div>
+    </header>
+
+    <main style="display: flex; flex-direction: column; gap: 25px;">
+        <section class="card">
+            <h2>Контролен Списък с Акаунти</h2>
+            <div class="table-container">
+                <table>
+                    <thead>
+                    <tr>
+                        <th style="width: 80px;">ID</th>
+                        <th>Име на Профил</th>
+                        <th style="width: 150px;">Текущ Статус</th>
+                        <th style="width: 180px;">Входящи Известия</th>
+                        <th style="width: 220px; text-align: right;">Управление</th>
+                    </tr>
+                    </thead>
+                    <tbody id="profiles-tbody">
+                    <tr><td colspan="5" style="text-align:center; padding: 30px;">Зареждане на регистъра...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="card">
+            <h2>Интегриране на нов профил</h2>
+            <div class="form-group">
+                <input type="text" id="new-profile-name" placeholder="Въведете име (напр. Профил Магазин)">
+                <button id="btn-add" class="btn-primary">Добави</button>
+            </div>
+        </section>
+    </main>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
